@@ -1,9 +1,8 @@
-# [ Info ]
 # Zflex - Zsh plugin manager without bloat and skill issiu
-# Created by: https://codeberg.org/Xeks4237
+# Created by: https://codeberg.org/xeks-happiness
 # Licensed under: 0BSD License
+# Inspired by: https://github.com/mattmc3/zsh_unplugged
 
-# [ Sourcing and Loading extra stuff ]
 # Standarized way of handling plugin directory,
 # regardless of functionargzero and posixargzero,
 # and with an option for a plugin manager to alter
@@ -16,5 +15,22 @@
 # Save location of this file in variable for easier use
 ZFLEX_HOME="${0:A:h}"
 
-# Main function of zflex
-function zflex() {}
+typeset -gx ZFLEX_PLUGIN_DIR="${ZFLEX_PLUGIN_DIR:-$ZFLEX_HOME/plugins/}"
+
+# [ Main cli function ]
+function zflex() {
+	local subcommand="$1"
+	shift
+	case "$subcommand" in
+		clone)
+			$ZFLEX_HOME/scripts/clone "$@"
+			;;
+		source)
+			$ZFLEX_HOME/scripts/source "$@"
+			;;
+		update)
+			$ZFLEX_HOME/scripts/update "$@"
+			;;
+	esac
+	$ZFLEX_HOME/scripts/optimize
+}
