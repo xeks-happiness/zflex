@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+function zflex_clone {
+	local plugin repo commitsha plugin_dir initfile initfiles=()
+	for plugin in $@; do
+		repo="$plugin"
+		clone_args=(-q --depth=1 --recursive --shallow-submodules)
+		# Pin repo to a specific commit sha if provided
+		if [[ "$plugin" == *'@'* ]]; then
+			repo="${plugin%@*}"
+			commitsha="${plugin#*@}"
+			clone_args+=(--no-checkout)
+		fi
+		plugin_dir=$ZFLEX_PLUGIN_DIR/${repo:t}
+		initfile=$plugin_dir/${repo:t}.plugin.zsh
+		if [[ ! -d $plugin_dir ]]; then
+			echo "Cloning $repo..."
+			git clone "${clone_args[@]}" https://github.com/$repo $plugin_dir
+			if [[ -n "$commitsha" ]]; then
+				git -C $plugin_dir fetch -q origin "$commitsha"
+				git -C $plugin_dir checkout -q "$commitsha"
+			fi
+		fi
+		if [[ ! -e $initfile ]]; then
+			initfiles=($plugin_dir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
+			(( $#initfiles )) && ln -sf $initfiles[1] $initfile
+		fi
+	done
+}
+
+zflex_clone "$@"

@@ -1,0 +1,13 @@
+#!/bin/zsh
+
+function zflex_source {
+	local plugin_dir
+	for plugin_dir in $@; do
+		[[ $plugin_dir = /* ]] || plugin_dir=$ZFLEX_PLUGIN_DIR/$plugin_dir
+		fpath+=$plugin_dir
+		local initfile=$plugin_dir/${plugin_dir:t}.plugin.zsh
+		(( $+functions[zsh-defer] )) && zsh-defer . $initfile || . $initfile
+	done
+}
+
+zflex_source "$@"
