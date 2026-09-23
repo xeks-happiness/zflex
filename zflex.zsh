@@ -21,6 +21,7 @@ typeset -gx ZFLEX_PLUGIN_DIR="${ZFLEX_PLUGIN_DIR:-$ZFLEX_HOME/plugins/}"
 function zflex() {
 	local subcommand="$1"
 	shift
+
 	case "$subcommand" in
 		clone)
 			$ZFLEX_HOME/scripts/clone "$@"
@@ -32,5 +33,6 @@ function zflex() {
 			$ZFLEX_HOME/scripts/update "$@"
 			;;
 	esac
+
 	$ZFLEX_HOME/scripts/optimize
 }
