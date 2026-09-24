@@ -1,8 +1,10 @@
+# [ Info ]
 # Zflex - Zsh plugin manager without bloat and skill issiu
 # Created by: https://codeberg.org/xeks-happiness
 # Licensed under: 0BSD License
 # Inspired by: https://github.com/mattmc3/zsh_unplugged
 
+# [ Sourcing, autoloading and setting default values for vars ]
 # Standarized way of handling plugin directory,
 # regardless of functionargzero and posixargzero,
 # and with an option for a plugin manager to alter
@@ -13,9 +15,15 @@
 0="${${(M)0:#/*}:-$PWD/$0}"
 
 # Save location of this file in variable for easier use
-ZFLEX_HOME="${0:A:h}"
+typeset -g ZFLEX_HOME="${0:A:h}"
 
 typeset -gx ZFLEX_PLUGIN_DIR="${ZFLEX_PLUGIN_DIR:-$ZFLEX_HOME/plugins/}"
+
+# Adding functions directory for autoloading
+fpath+=("$ZFLEX_HOME/functions/")
+
+# Autoloading functions from functions directory
+autoload -Uz _zflex_source
 
 # [ Main cli function ]
 function zflex() {
@@ -27,7 +35,7 @@ function zflex() {
 			$ZFLEX_HOME/scripts/clone "$@"
 			;;
 		source)
-			$ZFLEX_HOME/scripts/source "$@"
+			_zflex_source "$@"
 			;;
 		update)
 			$ZFLEX_HOME/scripts/update "$@"
