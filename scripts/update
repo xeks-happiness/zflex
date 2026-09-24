@@ -1,22 +1,51 @@
 #!/bin/zsh
 
 function zflex_update {
+	local plugin confirmation
+
 	case "$1" in
 		-i)
-			local d
-			for d in $ZFLEX_PLUGIN_DIR/*/.git(/); do
-				print -n "Update ${d:h:t}? [y/n]: "
-				read -rsq &> /dev/null && git -C "${d:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash
+			shift
+			for plugin in $ZFLEX_PLUGIN_DIR/*/.git(/); do
+				print -n "Update ${plugin:h:t}? [Y/n/a]: "
+				read -r confirmation
+				case "$confirmation" in
+					a|A)
+						print "Updating all plugins in parallel..."
+						for plugin in $ZFLEX_PLUGIN_DIR/*/.git(/); do
+							git -C "${plugin:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash &
+						done
+						wait
+						print "Finished updating"
+						return
+						;;
+					y|Y|'')
+						print "Updating ${plugin:h:t}..."
+						git -C "${plugin:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash
+						;;
+					n|N|*)
+						print "Skipped ${plugin:h:t}"
+						;;
+				esac
 			done
+			return
 			;;
-		*)
-			local d
-			for d in $ZFLEX_PLUGIN_DIR/*/.git(/); do
-				echo "Updating ${d:h:t}..."
-				git -C "${d:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash
+		-q)
+			shift
+			for plugin in $ZFLEX_PLUGIN_DIR/*/.git(/); do
+				git -C "${plugin:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash &> /dev/null &
 			done
+			wait
+			return
 			;;
 	esac
+
+	print "Updating all plugins in parallel..."
+	for plugin in $ZFLEX_PLUGIN_DIR/*/.git(/); do
+		git -C "${plugin:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash &> /dev/null &
+	done
+	wait
+	print "Finished updating"
 }
 
 zflex_update "$@"
