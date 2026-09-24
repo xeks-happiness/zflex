@@ -23,24 +23,4 @@ typeset -gx ZFLEX_PLUGIN_DIR="${ZFLEX_PLUGIN_DIR:-$ZFLEX_HOME/plugins/}"
 fpath+=("$ZFLEX_HOME/functions/")
 
 # Autoloading functions from functions directory
-autoload -Uz _zflex_source
-
-# [ Main cli function ]
-function zflex() {
-	local subcommand="$1"
-	shift
-
-	case "$subcommand" in
-		clone)
-			$ZFLEX_HOME/scripts/clone "$@"
-			;;
-		source)
-			_zflex_source "$@"
-			;;
-		update)
-			$ZFLEX_HOME/scripts/update "$@"
-			;;
-	esac
-
-	$ZFLEX_HOME/scripts/optimize
-}
+autoload -Uz _zflex_source zflex

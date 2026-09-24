@@ -1,0 +1,22 @@
+# Main cli function of zflex
+function zflex() {
+	case "$1" in
+		clone)
+			shift
+			$ZFLEX_HOME/scripts/clone "$@"
+			;;
+		source)
+			shift
+			_zflex_source "$@"
+			;;
+		update)
+			shift
+			$ZFLEX_HOME/scripts/update "$@"
+			;;
+	esac
+
+	# Run script which supposedly optimizes plugins in one or another way
+	# How much "optimization" will affect speed of plugins depends from
+	# plugin to plugin, but it not gonna slow anything for sure
+	$ZFLEX_HOME/scripts/optimize
+}
