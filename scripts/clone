@@ -21,10 +21,6 @@ function zflex_clone {
 				git -C $plugin_dir checkout -q "$commitsha"
 			fi
 		fi
-		if [[ ! -e $initfile ]]; then
-			initfiles=($plugin_dir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
-			(( $#initfiles )) && ln -sf $initfiles[1] $initfile
-		fi
 	done
 }
 
