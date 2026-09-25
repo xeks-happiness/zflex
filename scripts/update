@@ -92,4 +92,4 @@ function zflex_update {
 	print "Finished updating"
 }
 
-zflex_update "$@"
+zflex_update "$@" && $ZFLEX_HOME/scripts/optimize

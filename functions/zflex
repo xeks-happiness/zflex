@@ -7,16 +7,11 @@ function zflex() {
 			;;
 		source)
 			shift
-			_zflex_source "$@"
+			_zflex_source "$@"; $ZFLEX_HOME/scripts/optimize
 			;;
 		update)
 			shift
-			$ZFLEX_HOME/scripts/update "$@"
+			$ZFLEX_HOME/scripts/update "$@"; $ZFLEX_HOME/scripts/optimize
 			;;
 	esac
-
-	# Run script which supposedly optimizes plugins in one or another way
-	# How much "optimization" will affect speed of plugins depends from
-	# plugin to plugin, but it not gonna slow anything for sure
-	$ZFLEX_HOME/scripts/optimize
 }
