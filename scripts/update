@@ -86,10 +86,9 @@ function zflex_update {
 	# If no options were used just update all plugins in parallel
 	print "Updating all plugins in parallel..."
 	for plugin in $ZFLEX_PLUGIN_DIR/*/.git(/); do
-		git -C "${plugin:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash &> /dev/null || print "Couldn't update ${plugin:h:t}"
+		git -C "${plugin:h}" pull --ff --recurse-submodules --depth=1 --rebase --autostash || print "Couldn't update ${plugin:h:t}"
 	done
 	wait
-	print "Finished updating"
 }
 
-zflex_update "$@" && $ZFLEX_HOME/scripts/optimize
+zflex_update "$@"
