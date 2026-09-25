@@ -7,7 +7,7 @@ function zflex() {
 			;;
 		source)
 			shift
-			_zflex_source "$@"; $ZFLEX_HOME/scripts/optimize
+			$ZFLEX_HOME/scripts/optimize; _zflex_source "$@"
 			;;
 		update)
 			shift
