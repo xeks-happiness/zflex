@@ -1,9 +1,9 @@
 # Main cli function of zflex
 function zflex() {
 	case "$1" in
-		clone)
+		plug)
 			shift
-			$ZFLEX_HOME/scripts/clone "$@"
+			$ZFLEX_HOME/scripts/plug "$@"
 			;;
 		source)
 			shift
